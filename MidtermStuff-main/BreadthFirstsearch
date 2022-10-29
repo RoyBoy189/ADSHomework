@@ -1,0 +1,46 @@
+Boolean isReachable(char s, char d)
+    {
+        LinkedList<Integer>temp;
+ 
+        
+        boolean visited[] = new boolean[graph.capacity] //how do i find the amount of veritcles in a graph?
+ 
+        // Create a queue for BFS
+        LinkedList<Character> queue = new LinkedList<Character>();
+ 
+        // Mark the current node as visited and enqueue it
+        visited[s]=true;
+        queue.add(s);
+ 
+        // 'i' will be used to get all adjacent vertices of a vertex
+        Iterator<Integer> i;
+        while (queue.size()!=0)
+        {
+            // Dequeue a vertex from queue and print it
+            s = queue.poll();
+ 
+            char n;
+            i = adj[s].listIterator();
+ 
+            // Get all adjacent vertices of the dequeued vertex s
+            // If a adjacent has not been visited, then mark it
+            // visited and enqueue it
+            while (i.hasNext())
+            {
+                n = i.next();
+ 
+               
+                if (n==d)
+                    return true;
+ 
+                // Else, continue to do BFS
+                if (!visited[n])
+                {
+                    visited[n] = true;
+                    queue.add(n);
+                }
+            }
+        }
+ 
+        return false;
+    }
