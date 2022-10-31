@@ -22,6 +22,7 @@ public class Midterm {
         gradeNumverticles();
         //gradeToString();
         gradeNumEdges();
+        gradehascycles();
         // Now grade the two DSGraph questions
     }
 private static void gradeisConnected() {
@@ -49,17 +50,26 @@ private static void gradeNumverticles() {
 private static void gradeNumEdges() {
     System.out.println("\nGrading the numberOfEdgesfunction");
         DSGraph g = new DSGraph();
-        checkExpect(g.numVerticles(), 0, "Empty graph", 1);
+        checkExpect(g.numEdges(), 0, "Empty graph", 1);
         g.addEdge("a", "b");
         g.addEdge("a", "d");
         g.addEdge("c", "b");
         g.addEdge("c", "d");
         g.addEdge("e", "d");
-        g.addEdge("e", "b");
-        checkExpect(g.numVerticles(), 5, "Square graph", 1);
+        g.addEdge("e", "c");
+        checkExpect(g.numEdges(), 6, "pentagon", 1);
         
 }
-
+private static void gradehascycles() {
+    System.out.println("\nGrading the cycles function");
+        DSGraph g = new DSGraph();
+        checkExpect(g.hascycle(), false, "Empty graph", 1);
+        g.addEdge("a", "b");
+        g.addEdge("a", "d");
+        g.addEdge("c", "b");
+        g.addEdge("c", "d");
+        checkExpect(g.hascycle(), false, "Square graph", 1);
+}
 
 
     /**
