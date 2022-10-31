@@ -1,5 +1,3 @@
-package midterm;
-
 import java.util.LinkedList;
 
 /**
@@ -7,235 +5,40 @@ import java.util.LinkedList;
  */
 
 public class DSGraph {
-  // Our graph is a DSHashMap, mapping strings to a DSArrayList of neighbors
-  DSHashMap<DSArrayList<String>> graph;
 
-  public DSGraph() {
-    this.graph = new DSHashMap<>();
-  }
+    // Our graph is a DSHashMap, mapping strings to a DSArrayList of neighbors
+    DSHashMap<DSArrayList<String>> graph;
 
-  /**
-   * Adds a vertex to the graph, if it is not already there.
-   * 
-   * @param v The String that represents the new vertex
-   */
-  public void addVertex(String v) {
-    // Make sure v1 exists as a vertex
-    if (!graph.containsKey(v)) {
-      graph.put(v, new DSArrayList<String>());
+    public DSGraph() {
+        this.graph = new DSHashMap<>();
     }
-  }
 
-  /**
-   * Add an edge between vertices v1 and v2.
-   * If v1 and/or v2 do not already exist, create them.
-   * 
-   * @param v1 The first vertex
-   * @param v2 The second vertex
-   */
-  public void addEdge(String v1, String v2) {
-    // Make sure v1 exists as a vertex
-    if (!graph.containsKey(v1)) {
-      graph.put(v1, new DSArrayList<String>());
-    }
-    // Make sure v2 exists as a vertex
-    if (!graph.containsKey(v2)) {
-      graph.put(v2, new DSArrayList<String>());
-    }
-    // Add v1 and v2 to each others' neighbor lists
-    graph.get(v1).add(v2);
-    graph.get(v2).add(v1);
-  }
-
-  // //System.out.printf("The component containing %s has size %d\n", start,
-  // componentSize);
-  // }
-  // return count;
-  // }
-  public int numVerticles() {
-    DSHashMap<String> visited = new DSHashMap<>();
-    DSHashMap<String> parent = new DSHashMap<>();
-    LinkedList<String> q = new LinkedList<>();
-    for (String k : graph) {
-      q.add(k);
-    }
-    return q.size();
-  }
-
-  public int numEdges() {
-    LinkedList<String> q = new LinkedList<>();
-    // visited keeps track of vertices we've seen before
-    DSHashMap<String> visited = new DSHashMap<>();
-    int componentSize = 1;
-    int count = 0;
-    count++;
-    // Loop over all vertices of the graph
-    for (String start : graph) {
-      if (visited.containsKey(start))
-        continue;
-
-      // New, unseen vertex. Do a BFS from v
-      q.clear();
-      q.add(start); // v is this BFS's start verte
-      while (!q.isEmpty()) {
-        String v = q.removeFirst();
-        for (String nbr : graph.get(v)) {
-          if (visited.containsKey(nbr))
-            continue; // move on to the next neighbor
-          q.add(nbr);
-          visited.put(nbr, v);
-          componentSize += graph.get(v).length;
+    /**
+     * Adds a vertex to the graph, if it is not already there.
+     *
+     * @param v The String that represents the new vertex
+     */
+    public void addVertex(String v) {
+        // Make sure v1 exists as a vertex
+        if (!graph.containsKey(v)) {
+            graph.put(v, new DSArrayList<String>());
         }
-
-      }
     }
 
-    return componentSize / 2;
-  }
+    /**
+     * Add an edge between vertices v1 and v2.
+     * If v1 and/or v2 do not already exist, create them.
+     *
+     * @param v1 The first vertex
+     * @param v2 The second vertex
+     */
+    public void addEdge(String v1, String v2) {
+        // Make sure v1 exists as a vertex
+        addVertex(v1);
+        // Make sure v2 exists as a vertex
+        addVertex(v2);
 
-  public boolean isConnected() {
-    int count = 0;
-    boolean coonected = false;
-    LinkedList<String> q = new LinkedList<>();
-    // visited keeps track of vertices we've seen before
-    DSHashMap<String> visited = new DSHashMap<>();
-
-    // Loop over all vertices of the graph
-    for (String start : graph) {
-      if (visited.containsKey(start))
-        continue;
-
-      // New, unseen vertex. Do a BFS from v
-      q.clear();
-      q.add(start); // v is this BFS's start vertex
-      count++;
-      int componentSize = 1;
-
-      while (!q.isEmpty()) {
-        String v = q.removeFirst();
-        for (String nbr : graph.get(v)) {
-          if (visited.containsKey(nbr))
-            continue; // move on to the next neighbor
-          q.add(nbr);
-          componentSize++;
-          visited.put(nbr, "");
-          if (count == 0) {
-            coonected = false;
-          }
-          if (count > 1) {
-            coonected = false;
-          }
-          coonected = true;
-        }
-
-      }
-
-      // System.out.printf("The component containing %s has size %d\n", start,
-      // componentSize);
-    }
-    return coonected;
-  }
-
-  public boolean hascycle2() {
-    DSHashMap<String> parent = new DSHashMap<>();
-    DSHashMap<String> visted = new DSHashMap<>();
-    LinkedList<String> q = new LinkedList<>();
-    String farthest = "";
-    for (String start : graph) {
-      q.add(start);
-      visted.put(start, "");
-      ;
-      while (!q.isEmpty()) {
-        String v = q.removeFirst();
-        for (String nbr : graph.get(v)) {
-          if (!visted.containsKey(nbr)) {
-            visted.put(nbr, "");
-            q.add(nbr);
-            parent.put(nbr, v);
-          } else if (!parent.get(v).contains(nbr))
-            return true;
-        }
-      }
-    }
-    return false;
-  }
-
-
-
-
-  public boolean hascycle() {
-    
-    DSHashMap<String> parent = new DSHashMap<>();
-    LinkedList<String> q = new LinkedList<>();
-    DSHashMap<String> Vistedalready = new DSHashMap<>();
-    int numshares = 0;
-    // visited keeps track of vertices we've seen before
-    DSHashMap<String> visited = new DSHashMap<>();
-    for (String start : graph) {
-      if (visited.containsKey(start))
-        continue;
-
-      // New, unseen vertex. Do a BFS from v
-      q.clear();
-      q.add(start); // v is this BFS's start vertex
-      int componentSize = 1;
-      while (!q.isEmpty()) {
-        String v = q.removeFirst();
-        for (String nbr : graph.get(v)) {
-          if (visited.containsKey(nbr)) {
-            if(!visited.get(nbr).contains(v)) {        
-           numshares++;           
-          }
-          } else {
-            // move on to the next neighbor
-            
-            q.add(nbr);
-            componentSize++;            
-            visited.put(nbr, v);        
-            parent.put(v, nbr);
-          }
-        }
-      }
-      if(numshares == this.numVerticles()) {
-        return true;
-       }
-    }
-    return false;
-  }
-
-  public int discoverAllComponents() {
-    int count = 0;
-    LinkedList<String> q = new LinkedList<>();
-    // visited keeps track of vertices we've seen before
-    DSHashMap<String> visited = new DSHashMap<>();
-
-    // Loop over all vertices of the graph
-    for (String start : graph) {
-      if (visited.containsKey(start))
-        continue;
-
-      // New, unseen vertex. Do a BFS from v
-      q.clear();
-      q.add(start); // v is this BFS's start vertex
-      int componentSize = 1;
-      count++;
-      while (!q.isEmpty()) {
-        String v = q.removeFirst();
-        for (String nbr : graph.get(v)) {
-          if (visited.containsKey(nbr))
-            continue; // move on to the next neighbor
-          q.add(nbr);
-          componentSize++;
-          visited.put(nbr, "");
-        }
-
-      }
-
-      // System.out.printf("The component containing %s has size %d\n", start,
-      // componentSize);
-    }
-    return count;
-  }
-}
+        // Add v1 and v2 to each others' neighbor lists
+        if(graph.get(v1).contains(v2)) return; // Don't add a duplicate edge
 
 
