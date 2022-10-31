@@ -142,6 +142,29 @@ public class DSGraph {
     }
     return coonected;
   }
+   public boolean hascycle2() {
+    DSHashMap<String> parent = new DSHashMap<>();
+    DSHashMap<String> visted = new DSHashMap<>();
+    LinkedList<String> q = new LinkedList<>();
+    String farthest = "";
+    for (String start : graph) {
+      q.add(start);
+      visted.put(start, "");
+
+      while (!q.isEmpty()) {
+        String v = q.removeFirst();
+        for (String nbr : graph.get(v)) {
+          if (!visted.containsKey(nbr)) {
+            visted.put(nbr, "");
+            q.add(nbr);
+            parent.put(nbr, v);
+          } else if (!parent.get(v).equals(nbr))
+            return true;
+        }
+      }
+    }
+    return false;
+  }
   
   public int discoverAllComponents() {
     int count = 0;
