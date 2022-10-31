@@ -2,12 +2,6 @@ package midterm;
 
 import java.util.LinkedList;
 
-import javax.management.NotificationBroadcaster;
-import javax.naming.spi.DirStateFactory.Result;
-import javax.swing.plaf.TreeUI;
-
-import midterm.DSArrayList;
-
 /**
  * This is a class to hold a graph.
  */
@@ -15,7 +9,6 @@ import midterm.DSArrayList;
 public class DSGraph {
   // Our graph is a DSHashMap, mapping strings to a DSArrayList of neighbors
   DSHashMap<DSArrayList<String>> graph;
-  static int WHITE = 0, GRAY = 1, BLACK = 2;
 
   public DSGraph() {
     this.graph = new DSHashMap<>();
@@ -54,8 +47,6 @@ public class DSGraph {
     graph.get(v2).add(v1);
   }
 
-  
-
   // //System.out.printf("The component containing %s has size %d\n", start,
   // componentSize);
   // }
@@ -80,7 +71,8 @@ public class DSGraph {
     count++;
     // Loop over all vertices of the graph
     for (String start : graph) {
-      if (visited.containsKey(start)) continue;
+      if (visited.containsKey(start))
+        continue;
 
       // New, unseen vertex. Do a BFS from v
       q.clear();
@@ -88,16 +80,17 @@ public class DSGraph {
       while (!q.isEmpty()) {
         String v = q.removeFirst();
         for (String nbr : graph.get(v)) {
-          if (visited.containsKey(nbr)) continue; // move on to the next neighbor
+          if (visited.containsKey(nbr))
+            continue; // move on to the next neighbor
           q.add(nbr);
           visited.put(nbr, v);
           componentSize += graph.get(v).length;
-          }
-          
-        }     
+        }
+
       }
-      
-     return componentSize / 2;
+    }
+
+    return componentSize / 2;
   }
 
   public boolean isConnected() {
@@ -142,7 +135,8 @@ public class DSGraph {
     }
     return coonected;
   }
-   public boolean hascycle2() {
+
+  public boolean hascycle2() {
     DSHashMap<String> parent = new DSHashMap<>();
     DSHashMap<String> visted = new DSHashMap<>();
     LinkedList<String> q = new LinkedList<>();
@@ -150,7 +144,7 @@ public class DSGraph {
     for (String start : graph) {
       q.add(start);
       visted.put(start, "");
-
+      ;
       while (!q.isEmpty()) {
         String v = q.removeFirst();
         for (String nbr : graph.get(v)) {
@@ -158,14 +152,57 @@ public class DSGraph {
             visted.put(nbr, "");
             q.add(nbr);
             parent.put(nbr, v);
-          } else if (!parent.get(v).equals(nbr))
+          } else if (!parent.get(v).contains(nbr))
             return true;
         }
       }
     }
     return false;
   }
-  
+
+
+
+
+  public boolean hascycle() {
+    
+    DSHashMap<String> parent = new DSHashMap<>();
+    LinkedList<String> q = new LinkedList<>();
+    DSHashMap<String> Vistedalready = new DSHashMap<>();
+    int numshares = 0;
+    // visited keeps track of vertices we've seen before
+    DSHashMap<String> visited = new DSHashMap<>();
+    for (String start : graph) {
+      if (visited.containsKey(start))
+        continue;
+
+      // New, unseen vertex. Do a BFS from v
+      q.clear();
+      q.add(start); // v is this BFS's start vertex
+      int componentSize = 1;
+      while (!q.isEmpty()) {
+        String v = q.removeFirst();
+        for (String nbr : graph.get(v)) {
+          if (visited.containsKey(nbr)) {
+            if(!visited.get(nbr).contains(v)) {        
+           numshares++;           
+          }
+          } else {
+            // move on to the next neighbor
+            
+            q.add(nbr);
+            componentSize++;            
+            visited.put(nbr, v);        
+            parent.put(v, nbr);
+          }
+        }
+      }
+      if(numshares == this.numVerticles()) {
+        return true;
+       }
+    }
+    return false;
+  }
+
   public int discoverAllComponents() {
     int count = 0;
     LinkedList<String> q = new LinkedList<>();
@@ -200,4 +237,5 @@ public class DSGraph {
     return count;
   }
 }
+
 
